@@ -1,0 +1,1 @@
+exports.jsPath = '/this/is/a/very/secured/path/';
