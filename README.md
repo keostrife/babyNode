@@ -75,12 +75,13 @@ the modules have to return a class
 
 The example above is a minimum structure for a plugin
 
-the file name and the _bN_name value must match (uppercase lowercase doesn't matter...)
+the file name and the "_bN_name" value must match (uppercase lowercase doesn't matter...)
 
 And for everything to work, you just need to tell users to import it
 
 	bN().import("jQuery");
 or 
+
 	bN().import(["first_plugin","secondPlugin",....]);
 
 You can config your plugin right the moment you import it
