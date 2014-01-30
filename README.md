@@ -127,8 +127,9 @@ Oh yeah, that's what i'm talking about!!!
 ======License?======
 
 Even though I still want you to give me a BUZZ when you intend to use, or play around with it,
+
 MIT, GNU GPL, ... you name it! Basically it's free for everything!
-I still expect a little bit of pride from you! I'm actually super proud of myself for inventing this thing regardless what you thing about it :)
+
 
 
 
