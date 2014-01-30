@@ -28,7 +28,7 @@ Steps -> steps:
 
 3. SERVER notify CLIENT to import the javascript code and provide the routed URL
 
-4. CLIENT will create a new <script> tag with src = routed URL, and than append that script tag to <head>
+4. CLIENT will create a new &lt;script> tag with src = routed URL, and than append that script tag to <head>
 
 5. CLIENT run the newly imported javascript code automatically.
 
