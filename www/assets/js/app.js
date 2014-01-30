@@ -1,4 +1,4 @@
-var BR = (function($){
+var bN = (function($){
 	var _localSocket = 'http://localhost',
 		_BRKeoSocket = 'http://192.168.5.126',
 
@@ -11,8 +11,8 @@ var BR = (function($){
 	return {
 		io: io.connect(_currentSocket),
 		init: function(){
-			IO  = BR.io;
-			IO.on("import", BR.import);
+			IO  = bN.io;
+			IO.on("import", bN.import);
 		},
 		import: function(data){
 			for(var i = 0, iLen = data.length; i<iLen;i++) {
@@ -20,15 +20,18 @@ var BR = (function($){
 				var script = document.createElement('script');
 				script.src = link;
 				document.head.appendChild(script);
+				if(i == iLen - 1){
+					script.onload = function(){
+						IO.emit("clientReady");
+					}
+				}
 			}
-			setTimeout(function(){
-
-				IO.emit("init");
-			}, 5);
+			
 		}
 	}
 }(jQuery));
 
 $(document).ready(function(){
-	BR.init();
+	bN.init();
 });
+

@@ -77,7 +77,6 @@ Route.prototype = {
 		  	});
 		} else {
 			uri = uri.join("/");
-			console.log(_queryString);
 			if(uri.indexOf(".") < 0){
 				fs.readFile(__ROOTPATH__ + '/www/'+uri + '/index.html', function(err, data) {
 			    	if (err) {

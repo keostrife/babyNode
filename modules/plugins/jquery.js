@@ -63,17 +63,12 @@ function jQuery(selector, socket) {
 
 
 jQuery.prototype = {
-	_bN$_name: "jQuery",
-	_bN$_clientCode: function(){
+	_bN_name: "jQuery",
+	_bN_clientCode: function(){
 		//this code will go to client
-
 		IO.on("jQuery", function(data){
 			eval(data);
-			//$("body").css("background-color","red");
 		});
-	},
-	init: function() {
-		//optional
 	}
 }
 

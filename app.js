@@ -14,7 +14,7 @@ bN().init(8080).import("jQuery");
 
 
 IO.on("connection", function(socket){
-	socket.on("init", function(){
+	socket.on("clientReady", function(){
 		$("body", socket).css({backgroundColor:"green"}).click(function(){
 			alert('heheh');
 		});

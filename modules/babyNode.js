@@ -20,18 +20,33 @@
 			
 			_io.addListener("connection", this.clientImport);
 
-			_io.addListener("reconnection", this.clientImport);
 			return this;
 		},
-		import: function(pluginName, options){
-			var importClass = require("./plugins/"+pluginName);
-			var plugin = new importClass(options);
-			_plugins[plugin._bN$_name] = importClass;
-			route.addExceptions({
-				path: __CONF__.jsPath + plugin._bN$_name,
-				content: plugin._bN$_clientCode
-			});
-			return _plugins[plugin._bN$_name];
+		import: function(pluginNames, options){
+			
+			if(typeof pluginNames == "string"){
+				var pluginName = pluginNames;
+				var importClass = require("./plugins/"+pluginName);
+				var plugin = new importClass(options);
+				_plugins[plugin._bN$_name] = importClass;
+				route.addExceptions({
+					path: __CONF__.jsPath + plugin._bN$_name + ".js",
+					content: plugin._bN$_clientCode
+				});
+			} else {
+				for(var i = 0,iLen = pluginNames.length;i<iLen;i++) {
+					var pluginName = pluginNames[i];
+					var importClass = require("./plugins/"+pluginName);
+					var plugin = new importClass(options[pluginName]);
+					_plugins[plugin._bN_name] = importClass;
+					route.addExceptions({
+						path: __CONF__.jsPath + plugin._bN$_name + ".js",
+						content: plugin._bN_clientCode
+					});
+				}
+			}
+			
+			return this;
 		},
 		clientImport: function(socket) {
 			socket.emit("import", route.getExceptions());
