@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Babynode by keostrife</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Babynode</h1>
+        <p>NodeJS SocketIO Framework</p>
+
+        <p class="view"><a href="https://github.com/keostrife/babyNode">View the Project on GitHub <small>keostrife/babyNode</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/keostrife/babyNode/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/keostrife/babyNode/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/keostrife/babyNode">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="babynode" class="anchor" href="#babynode"><span class="octicon octicon-link"></span></a>babyNode</h1>
+
+<p>nodejs socketIO plugin system</p>
+
+<p>Basically the idea is to have a plugin system for nodeJS using socketIO</p>
+
+<p>Normally you will have to write code on both client and server for an application to work (socket.emit and socket.on)</p>
+
+<p>This system uses a dirty trick to dynamically generate code from the server and make client import it as legit javascript code.</p>
+
+<p>Therefor, with one import statement from server, both client and server have what they need to be up and running...</p>
+
+<p>I wrote a very sketchy jquery plugin that allows u to write jquery code from server...</p>
+
+<p>That would be a sample if you want to contribute a plugin :)</p>
+
+<p>I'm glad to hear from anyone who's interested</p>
+
+<p>======Core concept explained======</p>
+
+<p>Steps -&gt; steps:</p>
+
+<ol>
+<li><p>First CLIENT and SERVER have to establish a successful connection,</p></li>
+<li><p>SERVER will than generate javascript code for browser and routed it into an URL (Ex: localhost:8080/this/is/a/very/secured/path/jquery.js)</p></li>
+<li><p>SERVER notify CLIENT to import the javascript code and provide the routed URL</p></li>
+<li><p>CLIENT will create a new &lt;script&gt; tag with src = routed URL, and than append that script tag to </p></li>
+<li><p>CLIENT run the newly imported javascript code automatically.</p></li>
+<li><p>CLIENT notify SERVER that the new code is fully loaded and ready for further trafic</p></li>
+<li><p>SERVER receive "clientReady" message, here goes more code</p></li>
+</ol><p>======Performance?======</p>
+
+<p>sacrifice a header request for a big gain of code quality and organization? Worth it!!!
+Well... I would go for it!</p>
+
+<p>======How to write a plugin?======</p>
+
+<p>A sample of a plugin provided (jQuery)</p>
+
+<p>You must provide a class (I know there's no class in JS, but it will be too confusing calling it prototype or anything else... so let's call it "class" for now. You get the idea!!)</p>
+
+<p>basically you need to prepare a module inside /modules/plugins folder
+the modules have to return a class</p>
+
+<pre><code>function myPlugin() {
+    //constructor code
+    ...
+}
+
+myPlugin.prototype = {
+    _bN_name: "myPluginName",
+    _bN_clientCode: function(){
+        //all content inside this function will be send and digest by client
+        ...
+    }
+}
+
+module.exports = myPlugin;
+</code></pre>
+
+<p>The example above is a minimum structure for a plugin</p>
+
+<p>the module file name and the _bN_name value must match (uppercase lowercase doesn't matter...)</p>
+
+<p>And for everything to work, you just need to tell users to import it</p>
+
+<pre><code>bN().import("jQuery");
+</code></pre>
+
+<p>or </p>
+
+<pre><code>bN().import(["first_plugin","secondPlugin",....]);
+</code></pre>
+
+<p>You can config your plugin right the moment you import it</p>
+
+<pre><code>bN().import("superPlugin", {
+    config1: true,
+    config2: 125123,
+    config3: "sssss"
+});
+</code></pre>
+
+<p>Or call a method within your plugin:</p>
+
+<pre><code>var options = {
+    config1: true,
+    config2: 125123,
+    config3: "sssss"
+}
+bN("myPlugin").init(options);
+</code></pre>
+
+<p>I kinda twisted this system toward being a framework, so if you call</p>
+
+<pre><code>var port = 8080;
+bN().init(port);
+</code></pre>
+
+<p>It will create a server at the provided port. The syntax is designed to be very flexible, you can chain everything...</p>
+
+<pre><code>bN().init(port).import("jQuery")....;
+</code></pre>
+
+<p>======Where this is going?======</p>
+
+<p>I'm working on some more plugin (a database plugin which will synconize client HTML5 localStorage with online database, and an AUTH token-based system too...)</p>
+
+<p>Can you picture it? It's a very light-weight, scalable nodejs framework that can provide you with very powerful tools with a single import statement!!!</p>
+
+<p>Oh yeah, that's what i'm talking about!!!</p>
+
+<p>======License?======</p>
+
+<p>Even though I still want you to give me a BUZZ when you intend to use, or play around with it,</p>
+
+<p>MIT, GNU GPL, ... you name it! Basically it's free for everything!</p>
+
+<hr><p><a href="https://github.com/KeoStrife" class="user-mention">@KeoStrife</a>
+<a href="mailto:contact@keostrife.com">contact@keostrife.com</a></p>
+
+<hr>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/keostrife">keostrife</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-47646517-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
