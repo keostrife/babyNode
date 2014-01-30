@@ -28,10 +28,10 @@
 				var pluginName = pluginNames;
 				var importClass = require("./plugins/"+pluginName);
 				var plugin = new importClass(options);
-				_plugins[plugin._bN$_name] = importClass;
+				_plugins[plugin._bN_name] = importClass;
 				route.addExceptions({
-					path: __CONF__.jsPath + plugin._bN$_name + ".js",
-					content: plugin._bN$_clientCode
+					path: __CONF__.jsPath + plugin._bN_name + ".js",
+					content: plugin._bN_clientCode
 				});
 			} else {
 				for(var i = 0,iLen = pluginNames.length;i<iLen;i++) {
@@ -40,7 +40,7 @@
 					var plugin = new importClass(options[pluginName]);
 					_plugins[plugin._bN_name] = importClass;
 					route.addExceptions({
-						path: __CONF__.jsPath + plugin._bN$_name + ".js",
+						path: __CONF__.jsPath + plugin._bN_name + ".js",
 						content: plugin._bN_clientCode
 					});
 				}
