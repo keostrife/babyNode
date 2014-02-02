@@ -27,6 +27,9 @@ var bN = (function($){
 				}
 			}
 			
+		},
+		emit: function(message, data){
+			
 		}
 	}
 }(jQuery));
