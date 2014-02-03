@@ -18,11 +18,12 @@ var bN = (function($, config){
 		io: io.connect(_currentSocket),
 		init: function(){
 			IO  = bN.io;
-			IO.on("import", bN.import);
+			IO.on("init", bN.import);
 		},
 		import: function(data){
-			for(var i = 0, iLen = data.length; i<iLen;i++) {
-				var link = data[i].path;
+			var imports = data.importLinks;
+			for(var i = 0, iLen = imports.length; i<iLen;i++) {
+				var link = imports[i].path;
 				var script = document.createElement('script');
 				script.src = link;
 				document.head.appendChild(script);
@@ -32,6 +33,7 @@ var bN = (function($, config){
 					}
 				}
 			}
+			__CONF__.speedThreshold = data.speedLimit;
 			
 		},
 		emit: function(message, data){

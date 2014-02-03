@@ -37,7 +37,7 @@
 			messages[message] = messages[message] || {};
 
 
-			socket.on(message, function(){
+			socket.on(message, function(data){
 				var currentTime = new Date().getTime();
 				if(messages[message].timestamp && currentTime - messages[message].timestamp < gSpeedThreshold) {
 					console.log("requests received too fast");
@@ -50,17 +50,19 @@
 						} else {
 							messages[message].timestamp = gTimestamp = currentTime;
 							gCallStack++;
-							handler();
+							handler(data);
 						}
 					} else {
 						messages[message].timestamp = gTimestamp = currentTime;
 						gCallStack = 0;
-						handler();
+						handler(data);
 					}
 					
 				}
 			});
 		},
+
+
 		import: function(pluginNames, options){
 			
 			if(typeof pluginNames == "string"){
@@ -88,10 +90,14 @@
 			return this;
 		},
 		clientImport: function(socket) {
-			socket.emit("import", route.getExceptions());
+			socket.emit("init", {
+				importLinks: route.getExceptions(),
+				speedLimit: __CONF__.gSpeedThreshold
+			});
 		}
 	}
 
 
 	babyNode = _bN;
+	bN = babyNode();
 }());

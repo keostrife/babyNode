@@ -2,14 +2,9 @@
 __ROOTPATH__ = __dirname;
 
 
-
-
-
 //initiate
 require("./modules/babyNode");
-var bN = babyNode();
-bN.init(8080).import(["jQuery"]);
-
+bN.init(8080).import(["jQuery","dbAsync"]);
 
 
 
