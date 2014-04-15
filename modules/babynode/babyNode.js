@@ -61,8 +61,9 @@
 				}
 			});
 		},
-
-
+		emit: function(socket, message){
+			socket.emit(socket, message);
+		},
 		import: function(pluginNames, options){
 			
 			if(typeof pluginNames == "string"){
@@ -74,6 +75,7 @@
 					path: __CONF__.jsPath + plugin._bN_name + ".js",
 					content: plugin._bN_clientCode
 				});
+				plugin._bN_init();
 			} else {
 				for(var i = 0,iLen = pluginNames.length;i<iLen;i++) {
 					var pluginName = pluginNames[i];
@@ -84,6 +86,7 @@
 						path: __CONF__.jsPath + plugin._bN_name + ".js",
 						content: plugin._bN_clientCode
 					});
+					plugin._bN_init();
 				}
 			}
 			

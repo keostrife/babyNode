@@ -27,6 +27,9 @@ dbAsync.prototype = {
 			IO.emit("updateDB", localStorage);
 		}
 	},
+	_bN_init: function(){
+		//this function will get run automatically after the class is instanciated
+	},
 	init: function(socket){
 		var that = this;
 		bN.on(socket, "updateDB", function(data){

@@ -3,7 +3,7 @@ __ROOTPATH__ = __dirname;
 
 
 //initiate
-require("./modules/babyNode");
+require("./modules/babynode/babyNode");
 bN.init(8080).import(["jQuery","dbAsync"]);
 
 
@@ -16,14 +16,6 @@ IO.on("connection", function(socket){
 			alert('heheh');
 		});
 		
-	});
-
-	bN.on(socket, "test", function(){
-		console.log('heh');
-	});
-
-	bN.on(socket, "test2", function(){
-		console.log('hoh');
 	});
 });
 

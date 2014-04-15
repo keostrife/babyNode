@@ -69,6 +69,9 @@ jQuery.prototype = {
 		IO.on("jQuery", function(data){
 			eval(data);
 		});
+	},
+	_bN_init: function(){
+		//this function will get run automatically after the class is instanciated
 	}
 }
 
