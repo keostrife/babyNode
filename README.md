@@ -7,11 +7,11 @@ Basically the idea is to have a plugin system for nodeJS using socketIO
 
 Normally you will have to write code on both client and server for an application to work (socket.emit and socket.on)
 
-This system uses a dirty trick to dynamically generate code from the server and make client import it as legit javascript code.
+This system uses a trick to dynamically generate code from the server and make client import it as legit javascript code.
 
 Therefor, with one import statement from server, both client and server have what they need to be up and running...
 
-I wrote a very sketchy jquery plugin that allows u to write jquery code from server...
+I wrote the jquery plugin that allows u to write jquery code from server...
 
 That would be a sample if you want to contribute a plugin :)
 
@@ -24,7 +24,7 @@ Steps -> steps:
 
 1. First CLIENT and SERVER have to establish a successful connection,
 
-2. SERVER will than generate javascript code for browser and routed it into an URL (Ex: localhost:8080/this/is/a/very/secured/path/jquery.js)
+2. SERVER will than generate javascript code for browser and route it into an URL (Ex: localhost:8080/this/is/a/very/secured/path/jquery.js)
 
 3. SERVER notify CLIENT to import the javascript code and provide the routed URL
 
@@ -42,7 +42,7 @@ Steps -> steps:
 ======Performance?======
 
 sacrifice a header request for a big gain of code quality and organization? Worth it!!!
-Well... I would go for it!
+Moreover, it doesn't count toward initial page load time... the whole trafic thing execute after the page has been fully loaded!!!
 
 
 
@@ -65,6 +65,10 @@ the modules have to return a class
 
 	myPlugin.prototype = {
 		_bN_name: "myPluginName",
+		_bN_init: function(){
+			//code inside here got run automatically when the plugin got imported
+			...
+		},
 		_bN_clientCode: function(){
 			//all content inside this function will be send and digest by client
 			...
@@ -115,11 +119,11 @@ It will create a server at the provided port. The syntax is designed to be very 
 
 ======Where this is going?======
 
+Even though I make it like a framework, what I am trying to show is not a framework, but rather a PATERN... a programing pattern... If it's okay for me to give it a name, I will call it Node JS FEEDING PATERN... 'cause SERVER is feeding CLIENTS Javascript code on the fly!
+
 I'm working on some more plugin (a database plugin which will synconize client HTML5 localStorage with online database, and an AUTH token-based system too...)
 
 Can you picture it? It's a very light-weight, scalable nodejs framework that can provide you with very powerful tools with a single import statement!!!
-
-Oh yeah, that's what i'm talking about!!!
 
 
 
