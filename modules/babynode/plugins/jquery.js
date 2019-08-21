@@ -35,8 +35,9 @@ function _convertToText(input) {
 }
 
 //options are arguments passed down when plugin 
-function jQuery(selector, socket) {
-	this.socket = socket;
+function jQuery(selector, ...args) {
+	//last argument always is the socket
+	this.socket = args.pop();
 	this.selector = selector;
 
 	for(var i = 0, iLen = _jQueryMethodList.length;i<iLen;i++) {

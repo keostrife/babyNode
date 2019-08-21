@@ -2,9 +2,9 @@ var __CONF__ = {
 	speedThreshold: 5 //ms
 }
 
-var bN = (function($, config){
+var bN = (function($, config, io){
 	var _localSocket = 'http://localhost',
-		_BRKeoSocket = 'http://192.168.5.126',
+		_BRKeoSocket = 'http://10.120.42.252',
 
 	_currentSocket = _localSocket,
 
@@ -15,7 +15,7 @@ var bN = (function($, config){
 	_messages = {};
 
 	return {
-		io: io.connect(_currentSocket),
+		io: io.connect(`${_currentSocket}:${_port}`),
 		init: function(){
 			IO  = bN.io;
 			IO.on("init", bN.import);
@@ -56,7 +56,7 @@ var bN = (function($, config){
 			});
 		}
 	}
-}(jQuery, __CONF__));
+}(jQuery, __CONF__, io));
 
 
 

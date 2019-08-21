@@ -1,6 +1,6 @@
 (function(){
 	//a list of plugins got imported
-	var _plugins = {}, _io, _config;
+	var _plugins = {}, _io;
 	var route = require('./route');
 	//jQuery like initiator, simply instanciate the plugin that got imported
 	function _bN(selector) {
@@ -13,10 +13,10 @@
 
 	_bN.fn = _bN.prototype = {
 		init: function(port){
-			var server = require('http').createServer(route.reqHandler);
+			var server = require('http').createServer(route.reqHandler.bind(route));
 			IO = _io = require('socket.io').listen(server);
 			__CONF__ = require('./config');
-			if(!port)server.listen(80);
+			if(!port) server.listen(80);
 			else server.listen(port);
 			
 			
@@ -41,6 +41,7 @@
 				var currentTime = new Date().getTime();
 				if(messages[message].timestamp && currentTime - messages[message].timestamp < gSpeedThreshold) {
 					console.log("requests received too fast");
+					//disconnect client?
 					socket.disconnect();
 				} else {
 					if(gTimestamp && currentTime - gTimestamp < gSpeedThreshold){
@@ -65,7 +66,7 @@
 			socket.emit(socket, message);
 		},
 		import: function(pluginNames, options){
-			
+			//duplicated code below, need cleanup
 			if(typeof pluginNames == "string"){
 				var pluginName = pluginNames;
 				var importClass = require("./plugins/"+pluginName);

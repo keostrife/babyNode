@@ -1,53 +1,55 @@
 var fs = require('fs'),
 	url = require("url");
 
-var exceptions = [];
+class Router {
+	constructor() {
+		this.exceptions = [];
+		this.queryString = null;
+	}
 
-var _queryString = null;
+	load404(res) {
+		fs.readFile(__ROOTPATH__ + '/www/404.html', function(err, data) {
+		  	if (err) {
+		    		res.writeHead(500);
+		    		res.end('Internal Error! Whoever made this site doesn\'t provide a 404 page... shame on them!!!');
+		    		return;
+		  	}
 
-function _load404(res) {
-	fs.readFile(__ROOTPATH__ + '/www/404.html', function(err, data) {
-	  	if (err) {
-	    		res.writeHead(500);
-	    		res.end('Internal Error! Whoever made this site doesn\'t provide a 404 page... shame on them!!!');
-	    		return;
-	  	}
+		  	res.writeHead(404);
+		  	res.end(data);
+		});
+	}
 
-	  	res.writeHead(404);
-	  	res.end(data);
-	});
-}
-
-function Route(){
-
-}
-Route.prototype = {
-	addExceptions: function(o) {
-		exceptions.push({
+	addExceptions(o) {
+		this.exceptions.push({
 			path: o.path,
 			content: o.content
 		});
-	},
-	reqHandler: function(req, res) {
+	}
+
+	reqHandler(req, res) {
 		var uri = url.parse(req.url, true).pathname;
-		
+
 		//get query string
-		var queryString = url.parse(req.url, true).search.substr(1).split('&');
+		var queryString = "";
+		var urlSearch = url.parse(req.url, true).search;
+		if(urlSearch)
+			queryString = urlSearch.substr(1).split('&');
 		if (queryString != "") {
-			_queryString = {};
+			this.queryString = {};
 			for (var i = 0; i < queryString.length; ++i)
 			{
 			    var p=queryString[i].split('=');
 			    if (p.length != 2) continue;
-			    _queryString[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+			    this.queryString[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
 			}
 		} else {
-			_queryString = {};
+			this.queryString = {};
 		}
 
 		//routing exceptions
-		for(var i = 0, iLen = exceptions.length; i<iLen; i++) {
-			var exeption = exceptions[i];
+		for(var i = 0, iLen = this.exceptions.length; i<iLen; i++) {
+			var exeption = this.exceptions[i];
 			if(uri == exeption.path) {
 				res.writeHead(200);
 				var finalContent = String(exeption.content).split('{');
@@ -66,9 +68,9 @@ Route.prototype = {
 			uri.pop();
 		}
 		if(uri.length < 1) {
-		  	fs.readFile(__ROOTPATH__ + '/www/index.html', function(err, data) {
+		  	fs.readFile(__ROOTPATH__ + '/www/index.html', (err, data) =>{
 		    	if (err) {
-		      		_load404(res);
+		      		this.load404(res);
 		      		return;
 		    	}
 
@@ -78,9 +80,9 @@ Route.prototype = {
 		} else {
 			uri = uri.join("/");
 			if(uri.indexOf(".") < 0){
-				fs.readFile(__ROOTPATH__ + '/www/'+uri + '/index.html', function(err, data) {
+				fs.readFile(__ROOTPATH__ + '/www/'+uri + '/index.html', (err, data) =>{
 			    	if (err) {
-			      		_load404(res);
+			      		this.load404(res);
 			      		return;
 			    	}
 
@@ -88,9 +90,9 @@ Route.prototype = {
 			    	res.end(data);
 			  	});
 			} else {
-				fs.readFile(__ROOTPATH__ + '/www/'+uri, function(err, data) {
+				fs.readFile(__ROOTPATH__ + '/www/'+uri, (err, data) =>{
 			    	if (err) {
-			      		_load404(res);
+			      		this.load404(res);
 			      		return;
 			    	}
 
@@ -100,13 +102,15 @@ Route.prototype = {
 			}
 			
 		}
-	},
-	getExceptions: function(){
-		return exceptions;
-	},
-	getQueryString: function(){
-		return _queyString;
+	}
+
+	getExceptions(){
+		return this.exceptions;
+	}
+
+	getQueryString(){
+		return this.queyString;
 	}
 }
 
-module.exports = new Route();
+module.exports = new Router();
