@@ -9,6 +9,7 @@ bN.init(8080).import(["jQuery"]);
 
 
 IO.on("connection", function(socket){
+	//make sure client version of bN is initiated
 	bN.on(socket, "clientReady", function(){
 
 		//start coding!!!
