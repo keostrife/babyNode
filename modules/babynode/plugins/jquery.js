@@ -2,8 +2,6 @@
  *
  */
 
-var _jQueryMethodList = ["andSelf", "size", "outerWidth", "width", "innerWidth", "outerHeight", "height", "innerHeight", "scrollTop", "scrollLeft", "offsetParent", "position", "offset", "fadeToggle", "fadeOut", "fadeIn", "slideToggle", "slideUp", "slideDown", "finish", "stop", "animate", "fadeTo", "ajaxSend", "ajaxSuccess", "ajaxError", "ajaxComplete", "ajaxStop", "ajaxStart", "undelegate", "delegate", "unbind", "bind", "hover", "contextmenu", "error", "keyup", "keypress", "keydown", "submit", "select", "change", "mouseleave", "mouseenter", "mouseout", "mouseover", "mousemove", "mouseup", "mousedown", "dblclick", "click", "unload", "scroll", "resize", "load", "focusout", "focusin", "focus", "blur", "serializeArray", "serialize", "toggle", "hide", "show", "css", "unwrap", "wrap", "wrapInner", "wrapAll", "replaceAll", "insertAfter", "insertBefore", "prependTo", "appendTo", "domManip", "detach", "replaceWith", "html", "clone", "empty", "remove", "after", "before", "prepend", "append", "text", "contents", "children", "siblings", "prevUntil", "nextUntil", "prevAll", "nextAll", "prev", "next", "parentsUntil", "parents", "parent", "addBack", "add","constructor", "init", "toArray", "get", "pushStack", "each", "ready", "slice", "first", "last", "eq", "map", "end", "push", "sort", "splice", "extend", "data", "removeData", "queue", "dequeue", "delay", "clearQueue", "promise", "attr", "removeAttr", "prop", "removeProp", "addClass", "removeClass", "toggleClass", "hasClass", "val", "on", "one", "off", "trigger", "triggerHandler", "find", "has", "not", "filter", "is", "closest", "index"]
-
 function _convertToText(input) {
     var string = [];
 
@@ -40,24 +38,28 @@ function jQuery(selector, ...args) {
 	this.socket = args.pop();
 	this.selector = selector;
 
-	for(var i = 0, iLen = _jQueryMethodList.length;i<iLen;i++) {
-		var currentMed = _jQueryMethodList[i];
+	return new Proxy(this, {
+		get: function(obj, prop){
+			if(obj[prop]) return obj[prop];
+			return function() {
+				var selectorArgs = [" "];
+				var methodArgs = []
+				for(let g = 0; g<args.length; g++)
+					selectorArgs.push(_convertToText(args[g]));
 
-		jQuery.prototype[currentMed] = (function(currentMed){
-			return function(){
-				var args = []
-				for(var g = 0; g<arguments.length; g++)
-					args.push(_convertToText(arguments[g]));
+				for(let g = 0; g<arguments.length; g++)
+					methodArgs.push(_convertToText(arguments[g]));
 
 				this.socket.emit("jQuery", 
-					"$('"+this.selector+"')."+currentMed+"("+args.join(",")+");"
+					`$('${this.selector}'${selectorArgs.length?`${selectorArgs.join(",")}`:""}).${prop}(${methodArgs.join(",")});`
 				);
 
 				return this;
-			}	
-		}(currentMed));
+			}
+		}
+	});
 
-	}
+	
 }
 
 
