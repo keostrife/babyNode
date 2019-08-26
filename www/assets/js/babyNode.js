@@ -16,12 +16,19 @@ var bN = (function($, config, io){
 
 	return {
 		io: io.connect(`${_currentSocket}:${_port}`),
-		init: function(){
+		init: function(callback){
 			IO  = bN.io;
-			IO.on("init", bN.import);
+			IO.on("init", (data)=>{
+				bN.import(data,callback)
+			});
 		},
-		import: function(data){
+		import: function(data, callback){
+			data = data || {importLinks:[]};
 			var imports = data.importLinks;
+			if(!imports || !imports.length) {
+				bN.emit("clientReady");
+				callback();
+			}
 			for(var i = 0, iLen = imports.length; i<iLen;i++) {
 				var link = imports[i].path;
 				var script = document.createElement('script');
@@ -30,6 +37,7 @@ var bN = (function($, config, io){
 				if(i == iLen - 1){
 					script.onload = function(){
 						bN.emit("clientReady");
+						callback();
 					}
 				}
 			}
@@ -51,7 +59,7 @@ var bN = (function($, config, io){
 			}
 		},
 		on: function(message, handler) {
-			socket.on(message, function(data){
+			IO.on(message, function(data){
 				handler(data);
 			});
 		}
